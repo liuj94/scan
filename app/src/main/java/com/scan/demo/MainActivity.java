@@ -11,7 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hello.scan.ScanCallBack;
-import com.hello.scan.ScanTool;
+import com.hello.worker.ScanToolImpl;
+import com.scan.demo.ScanTool;
 import com.scan.demo.databinding.ActivityMainBinding;
 import com.telpo.tps550.api.util.SystemUtil;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ScanCallBack {
         sDevices.put("TPS508", new Pair<>("/dev/ttyACM0", 115200));
         sDevices.put("TPS360", new Pair<>("/dev/ttyACM0", 115200));
         sDevices.put("TPS537", new Pair<>("/dev/ttyACM0", 115200));
+        sDevices.put("F2", new Pair<>("/dev/ttyACM0", 115200));
         sDevices.put("D2", new Pair<>("/dev/ttyHSL0", 9600)); // D2串口模式
         //sDevices.put("D2", new Pair<>("/dev/ttyACM0", 115200)); // D2U转串模式
         sDevices.put("TPS980", new Pair<>("/dev/ttyS0", 115200));
@@ -56,7 +58,11 @@ public class MainActivity extends AppCompatActivity implements ScanCallBack {
             ScanTool.GET.playSound(true);
         }
 
-        mBinding.init.setOnClickListener(pView -> initScanTool());
+//        ScanToolImpl.getInstance().init()
+        mBinding.init.setOnClickListener(pView ->{
+            ScanToolImpl.getInstance().init();
+            ScanToolImpl.getInstance().startReceiveData();
+                });
         mBinding.release.setOnClickListener(pView -> ScanTool.GET.release());
         mBinding.pauseReceiveData.setOnClickListener((pView -> ScanTool.GET.pauseReceiveData()));
         mBinding.resumeReceiveData.setOnClickListener((pView -> ScanTool.GET.resumeReceiveData()));
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ScanCallBack {
     @Override
     public void onScanCallBack(String data) {
         if (TextUtils.isEmpty(data)) return;
-        Log.e("Hello", "回调数据 == > " + data);
+        Log.e("Hello", "回调数据 hhhhhh== > " + data);
         if (scanCount % 2 == 0) {
             mBinding.scanResult.setTextColor(Color.RED);
         } else {

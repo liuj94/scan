@@ -69,6 +69,8 @@ public class ScanService extends Service {
                     ScanToolImpl.getInstance().playSound(play);
                     break;
                 case "init_serial":
+                    ScanToolImpl.getInstance().init();
+                    ScanToolImpl.getInstance().startReceiveData();
                     IoUtil.turnOn();
 //                    if (ScanToolImpl.getInstance().isCdcModel()) {
 //                        Log.e("Hello", "onStartCommand == > CDC模式");
